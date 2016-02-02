@@ -1,13 +1,8 @@
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
-
-
-
-
-void islandFind(int** M,int n,int m){
-	
 	struct point{
 		int i=0;
 		int j=0;
@@ -19,62 +14,60 @@ void islandFind(int** M,int n,int m){
 			<<"down  "<<down<<endl
 			<<"left  "<<left<<endl
 			<<"right "<<right<<endl;
-		}
-		
+		}		
 	};
+	
+
+void isIsland(vector<point>* vector, int i_){
+	
+		int i=i_;
+				
+			if(i_!=vector.size()){
+			
+			point local=vector->at(i);			
+			
+				if(local.up){					
+					isIsland(vector,i++);
+				}if(local.down){
+					isIsland(vector,i++);
+				}if(local.left){
+					isIsland(vector,i++);
+				}if(local.right){
+					isIsland(vector,i++);
+				}	
+			}
+			
+					
+}
+
+
+
+void islandFind(int** M,int n,int m){
+	
 	vector<point> v_points;
 
 	for(int i=0;i<n;i++){
-			for(int j=0;j<m;j++){
-				if((int)M[i*m+j]){
-					  //  cout<<"i:"<<i<<" j:"<<j<<" ";
-					    point one;
-					    one.i=i;
-					    one.j=j;
-					  if(i>0 && (int) M[(i-1)*n+j]){
-//						cout<<"up one ";					
-						one.up=true;
-					} if(i<(n-1) && (int) M[(i+1)*n+j]){
-//						cout<<"down one ";			
-						one.down=true;						
-					} if(j<(m-1) && (int) M[i*m+(j+1)]){
-//						cout<<"right one ";
-						one.right=true;
-					} if(j>0 && (int) M[i*m+(j-1)]){
-//						cout<<"left one ";
-						one.left=true;
-					}
-					v_points.push_back(one);
-				
+		for(int j=0;j<m;j++){
+			if((int)M[i*m+j]){					  
+				    point one;
+				    one.i=i;
+				    one.j=j;
+				    
+				  if(i>0 && (int) M[(i-1)*n+j]){											
+					one.up=true;
+				} if(i<(n-1) && (int) M[(i+1)*n+j]){			
+					one.down=true;						
+				} if(j<(m-1) && (int) M[i*m+(j+1)]){
+					one.right=true;
+				} if(j>0 && (int) M[i*m+(j-1)]){
+					one.left=true;
 				}
-						
-			}				
-		
-			cout<<endl;
+				v_points.push_back(one);
+			
+			}					
+		}				
 	}
-	
-	size_t v_size_p=v_points.size();
-
-	if(v_size_p){
-		for(int i=0;i<v_size_p;i++){
-			point local=v_points.at(i);			
-			
-				if(local.up){
-					
-					
-				}if(local.down){
-					
-				}if(local.left){
-					
-				}if(local.right){
-					
-				}
-			
-			
-			
-			
-		}			
-	}
+	isIsland(&v_points,0);	
 }
 
 
@@ -87,8 +80,7 @@ int main(int argc, char** argv) {
 	{1,0,1,0,0	},
 	{0,0,0,0,0	}
 	};
-	
-	
+
 	islandFind((int**)M,5,5);
 	
 	return 0;
