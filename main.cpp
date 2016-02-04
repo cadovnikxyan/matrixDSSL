@@ -6,91 +6,110 @@ using namespace std;
 	struct point{
 		int i=0;
 		int j=0;
-		bool falgs[4]={0,0,0,0};
-		bool left=false, right=false,up=false, down=false,flagEnd=false;
 		void print(){
 			cout<<"i:"<<i<<" j:"<<j<<" "
-			<<endl
-			<<"up    "<<up<<endl
-			<<"down  "<<down<<endl
-			<<"left  "<<left<<endl
-			<<"right "<<right<<endl;
-		}
-				
+			<<endl;		
+			}				
 	};
 	
-bool isIsland(int** M,int i, int j,int n, int m){
+static vector<point> save;
 	
-	int up=i-1;
-	int down=i+1;
-	int left=j-1;
-	int rignt=j+1;
+	bool isSave(vector<point>* _save,point one_){
+		bool finded=false;
+		for(int i=0;i<_save->size();i++){
+			point b=_save->at(i);
+			if((b.i==one_.i)&&(b.j==one_.j)){
+				finded = true;	
+			};
+		}
+		return finded;
+	}
 	
-	int vi[4]={up,down, i ,  i  };
-	int vj[4]={j,  j, left,right};
+	
+void isIsland(int** M,int i, int j,int n, int m, int* S){
+				
+			point one;
+			one.i=i;
+			one.j=j;
+			if(isSave(&save,one)){
+
+				return;
+			}
 	
 	
-	  		  if(i>0 && (int) M[(i-1)*n+j]){											
-
-					if(isIsland(M,vi[0],vj[0],n,m)){
-						
-					}
-				} if(i<(n-1) && (int) M[(i+1)*n+j]){			
-
-					if(isIsland(M,vi[1],vj[1],n,m)){
-						
-					}	
-					
-				} if(j>0 && (int) M[i*m+(j-1)]){
-
-					if(isIsland(M,vi[2],vj[2],n,m)){
-						
-					}
-					
-				} if(j<(m-1) && (int) M[i*m+(j+1)]){
-
-					if(isIsland(M,vi[3],vj[3],n,m)){
-						
-					}
-				}
+		if(i>0 && (int) M[(i-1)*n+j]){
+			save.push_back(one);
+//			cout<<endl<<"i:"<<i+1<<" j:"<<j+1<<" "<<"up"<<"  "<<*S;
+			isIsland(M,i-1,j,n,m,S);	
+		}
+		
+		if(i<(n-1) && (int) M[(i+1)*n+j]){
+			save.push_back(one);
+//			cout<<endl<<"i:"<<i+1<<" j:"<<j+1<<" "<<"down"<<"  "<<*S;
+			isIsland(M,i+1,j,n,m,S);			
 			
+		}
+		
+		if(j>0 && (int) M[i*m+(j-1)]){
+			save.push_back(one);
+//			cout<<endl<<"i:"<<i+1<<" j:"<<j+1<<" "<<"left"<<"  "<<*S;
+			isIsland(M,i,j-1,n,m,S);			
+
+		}
+		
+		if(j<(m-1) && (int) M[i*m+(j+1)])	{
+			save.push_back(one);
+//			cout<<endl<<"i:"<<i+1<<" j:"<<j+1<<" "<<"right"<<"  "<<*S;
+			isIsland(M,i,j+1,n,m,S);			
+		}
+			(*S)++;
+	
 }
 
 
 
-
-
-vector<point> v_points;
-vector<point> savePoint;
-
-	
 void islandFind(int** M,int n,int m ){
 	
 	for(int i=0;i<n;i++){
-		for(int j=0;j<m;j++){
-			if((int)M[i*m+j]){					  
-				    point one;
-				    one.i=i;
-				    one.j=j;
-				    isIsland(M,i,j,n,m,&one);			
-					v_points.push_back(one);			
+		for(int j=0;j<m;j++){		
+			if((int)M[i*m+j]){
+			point one;
+			one.i=i;
+			one.j=j;
+			
+			if(!isSave(&save,one)){
+					int s=0;
+					
+					cout<<endl<<"island start in point: "<<"i:"<<i+1<<" j:"<<j+1<<" ";	
+					cout<<endl<<"---------------------";				  				    
+				    isIsland(M,i,j,n,m,&s);
+					cout<<endl<<"island area = : "<<s;
+					cout<<endl<<"---------------------"<<endl;	
+																
+				}
 			}					
 		}				
 	}	
 }
 
 
+
+
 int main(int argc, char** argv) {
 	
 	int M[5][5]={
-	{0,0,0,1,0	},
-	{0,0,1,1,1	},
-	{0,1,0,1,0	},
-	{1,0,1,0,0	},
-	{0,0,0,0,0	}
+					{0,0,1,1,1	},
+					{0,0,0,1,1	},
+					{1,0,0,0,1	},
+					{1,0,0,0,0	},
+					{0,0,1,0,0	}
 	};
-
+	
 	islandFind((int**)M,5,5);
+
+
+	
+
 	
 	return 0;
 }
